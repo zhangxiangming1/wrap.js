@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style type="text/css">
+    table{
+      border:1px solid gray;
+      margin-bottom: 20px;
+      border-collapse: collapse;
+      width: 400px;
+    }
+    thead{
+      background-color: lightgray;
+    }
+    th,td{
+      border:1px solid gray;
+      padding: 3px;
+      text-align: center;
+    }
+  </style>
+  <script src="wrap.js"></script>
+</head>
+<body>
+
+  <!-- 
+    以下是注释风格的模板：
+    注意区分html注释和模板注释。
+    在html注释的内侧加一对#号，就是模板注释。
+    一对模板注释之间的内容必须是语法正确的javascript代码。
+    注意：模板注释的javascript代码中的this指向_warp方法的第一个参数。
+  -->
+  <table id="template1">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--# for(let item of this){ #-->
+      <tr>
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+      </tr>
+      <!--# } #-->
+    </tbody>
+  </table>
+
+  <!-- 
+    以下是属性风格的模板：
+    所有的dom节点都可以带一个wrapper属性。
+    wrapper属性的值是一段语法正确的javascript代码。
+    render()是一个假函数，事实上是一个占位符，表示在此处渲染所在的dom节点。
+    当wrapper中的代码非常复杂时，可用render()进行卡位。 
+  -->
+  <table id="template2">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr wrapper="for(let item of this){render();}">
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 去除render()的语法糖 -->
+  <table id="template3">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr wrapper="for(let item of this){}">
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 
+    超级语法糖：去除render()和大括号。
+    超级语法糖是作者推荐的方式，
+    开发者应该将自己的model调整得足够简单以适应超级语法糖 
+  -->
+  <table id="template4">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr wrapper="for(let item of this)">
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 按条件渲染 -->
+  <table id="template5">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>sex</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr wrapper="for(let item of this)">
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+        <td wrapper="if(item.sex===1)" _style="color:red;">男</td>
+        <td wrapper="else" _style="color:green;">女</td>
+      </tr>
+    </tbody>
+  </table>
+  <script>
+    let model = [
+      {
+        id:1,
+        name:"zhangxiangming",
+        sex:1
+      },{
+        id:2,
+        name:"jianghaiyan",
+        sex:0
+      }
+    ];
+    document.querySelector("#template1")._wrap(model);
+    document.querySelector("#template2")._wrap(model);
+    document.querySelector("#template3")._wrap(model);
+    document.querySelector("#template4")._wrap(model);
+    document.querySelector("#template5")._wrap(model);
+  </script>
+</body>
+</html>
